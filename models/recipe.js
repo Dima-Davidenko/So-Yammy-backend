@@ -1,15 +1,15 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-const Joi = require('joi');
+const Joi = require("joi");
 
-const { mongooseHandleError } = require('../helpers');
+const { mongooseHandleError } = require("../helpers");
 
 const recipeSchema = new Schema(
   {
     originalId: String,
     title: {
       type: String,
-      required: [true, 'Set name for recipe'],
+      required: [true, "Set name for recipe"],
     },
     category: {
       type: String,
@@ -25,7 +25,7 @@ const recipeSchema = new Schema(
     },
     description: {
       type: String,
-      default: '',
+      default: "",
     },
     thumb: {
       type: String,
@@ -35,7 +35,7 @@ const recipeSchema = new Schema(
     },
     time: {
       type: String,
-      default: '',
+      default: "",
     },
     popularity: {
       type: Number,
@@ -43,17 +43,17 @@ const recipeSchema = new Schema(
     },
     favorites: {
       type: [Schema.Types.ObjectId],
-      ref: 'user',
+      ref: "user",
       default: [],
     },
     likes: {
       type: [Schema.Types.ObjectId],
-      ref: 'user',
+      ref: "user",
       default: [],
     },
     youtube: {
       type: String,
-      default: '',
+      default: "",
     },
     tags: {
       type: [String],
@@ -65,12 +65,12 @@ const recipeSchema = new Schema(
         {
           id: {
             type: Schema.Types.ObjectId,
-            ref: 'ingridient',
+            ref: "ingridient",
             required: true,
           },
           measure: {
             type: String,
-            default: '',
+            default: "",
           },
         },
       ],
@@ -80,14 +80,24 @@ const recipeSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-recipeSchema.post('save', mongooseHandleError);
+recipeSchema.post("save", mongooseHandleError);
 
 const addSchema = Joi.object({});
 
+const updateFavoriteSchema = Joi.object({
+  favoriteId: Joi.string().required(),
+});
+
+const updateLikeSchema = Joi.object({
+  likeId: Joi.string().required(),
+});
+
 const schemas = {
   addSchema,
+  updateFavoriteSchema,
+  updateLikeSchema,
 };
 
-const Recipe = model('recipe', recipeSchema);
+const Recipe = model("recipe", recipeSchema);
 
 module.exports = { Recipe, schemas };
