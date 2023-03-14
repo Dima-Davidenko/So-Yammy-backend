@@ -84,18 +84,8 @@ recipeSchema.post("save", mongooseHandleError);
 
 const addSchema = Joi.object({});
 
-const updateFavoriteSchema = Joi.object({
-  favoriteId: Joi.string().required(),
-});
-
-const updateLikeSchema = Joi.object({
-  likeId: Joi.string().required(),
-});
-
 const schemas = {
   addSchema,
-  updateFavoriteSchema,
-  updateLikeSchema,
 };
 
 const Recipe = model("recipe", recipeSchema);

@@ -3,7 +3,7 @@ const express = require("express");
 const ctrl = require("../../controllers/recipes");
 
 const { authenticate, isValidId, validateBody } = require("../../middlewares");
-const { schemas } = require("../../models/recipe");
+// const { schemas } = require("../../models/recipe");
 
 const router = express.Router();
 
@@ -19,32 +19,13 @@ router.get("/:id", authenticate, isValidId, ctrl.getById);
 
 // router.delete('/:id', authenticate, isValidId, ctrl.deleteById);
 
-router.patch(
-  "/:id/favorite",
-  authenticate,
-  isValidId,
-  validateBody(schemas.updateFavoriteSchema),
-  ctrl.updateFavoriteById
-);
-router.patch(
-  "/:id/like",
-  authenticate,
-  isValidId,
-  validateBody(schemas.updateLikeSchema),
-  ctrl.updateLikeById
-);
-router.delete(
-  "/:id/like",
-  authenticate,
-  isValidId,
-  validateBody(schemas.updateLikeSchema),
-  ctrl.deleteLikeById
-);
+router.patch("/:id/favorite", authenticate, isValidId, ctrl.updateFavoriteById);
+router.patch("/:id/like", authenticate, isValidId, ctrl.updateLikeById);
+router.delete("/:id/like", authenticate, isValidId, ctrl.deleteLikeById);
 router.delete(
   "/:id/favorite",
   authenticate,
   isValidId,
-  validateBody(schemas.updateFavoriteSchema),
   ctrl.deleteFavoriteById
 );
 

@@ -1,21 +1,24 @@
 const { HttpError } = require("../../helpers");
 const { Recipe } = require("../../models/recipe");
-const { User } = require("../../models/user");
 
 const deleteFavoriteById = async (req, res) => {
-  const { id } = req.params;
-  const { favoriteId } = req.body;
-  const user = await User.findById(id);
-  if (!user) {
-    throw HttpError(404, `User with id ${id} was not found`);
+  const { id: recipeId } = req.params;
+  const { id } = req.user;
+
+  const isDeleted = await Recipe.find({ _id: recipeId, favorites: id });
+  if (isDeleted.length === 0) {
+    throw HttpError(
+      400,
+      `Recipe with id ${recipeId} already delete from your favorites list`
+    );
   }
 
-  const result = await Recipe.findByIdAndUpdate(favoriteId, {
+  const result = await Recipe.findByIdAndUpdate(recipeId, {
     $pull: { favorites: id },
     $inc: { popularity: -1 },
   });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, `Not found recipe with id ${recipeId}`);
   }
 
   res.status(200).json({ message: "Successfully delete from your favorites" });
